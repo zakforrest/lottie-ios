@@ -77,4 +77,49 @@ final class Repeater: ShapeItem {
     try transformContainer.encode(scale, forKey: .scale)
   }
   
+  required init(dictionary: [String : Any]) throws {
+    if let copiesDictionary: [String: Any] = try? dictionary.valueFor(key: CodingKeys.copies.rawValue) {
+      self.copies = try KeyframeGroup<Vector1D>(dictionary: copiesDictionary)
+    } else {
+      self.copies = KeyframeGroup(Vector1D(0))
+    }
+    if let offsetDictionary: [String: Any] = try? dictionary.valueFor(key: CodingKeys.offset.rawValue) {
+      self.offset = try KeyframeGroup<Vector1D>(dictionary: offsetDictionary)
+    } else {
+      self.offset = KeyframeGroup(Vector1D(0))
+    }
+    let transformDictionary: [String: Any] = try dictionary.valueFor(key: CodingKeys.transform.rawValue)
+    if let startOpacityDictionary: [String: Any] = try? transformDictionary.valueFor(key: TransformKeys.startOpacity.rawValue) {
+      self.startOpacity = try KeyframeGroup<Vector1D>(dictionary: startOpacityDictionary)
+    } else {
+      self.startOpacity = KeyframeGroup(Vector1D(100))
+    }
+    if let endOpacityDictionary: [String: Any] = try? transformDictionary.valueFor(key: TransformKeys.endOpacity.rawValue) {
+      self.endOpacity = try KeyframeGroup<Vector1D>(dictionary: endOpacityDictionary)
+    } else {
+      self.endOpacity = KeyframeGroup(Vector1D(100))
+    }
+    if let rotationDictionary: [String: Any] = try? transformDictionary.valueFor(key: TransformKeys.rotation.rawValue) {
+      self.rotation = try KeyframeGroup<Vector1D>(dictionary: rotationDictionary)
+    } else {
+      self.rotation = KeyframeGroup(Vector1D(0))
+    }
+    if let positionDictionary: [String: Any] = try? transformDictionary.valueFor(key: TransformKeys.position.rawValue) {
+      self.position = try KeyframeGroup<Vector3D>(dictionary: positionDictionary)
+    } else {
+      self.position = KeyframeGroup(Vector3D(x: Double(0), y: 0, z: 0))
+    }
+    if let anchorPointDictionary: [String: Any] = try? transformDictionary.valueFor(key: TransformKeys.anchorPoint.rawValue) {
+      self.anchorPoint = try KeyframeGroup<Vector3D>(dictionary: anchorPointDictionary)
+    } else {
+      self.anchorPoint = KeyframeGroup(Vector3D(x: Double(0), y: 0, z: 0))
+    }
+    if let scaleDictionary: [String: Any] = try? transformDictionary.valueFor(key: TransformKeys.scale.rawValue) {
+      self.scale = try KeyframeGroup<Vector3D>(dictionary: scaleDictionary)
+    } else {
+      self.scale = KeyframeGroup(Vector3D(x: Double(100), y: 100, z: 100))
+    }
+    try super.init(dictionary: dictionary)
+  }
+  
 }
