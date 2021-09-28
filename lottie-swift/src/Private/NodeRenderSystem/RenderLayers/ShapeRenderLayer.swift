@@ -43,6 +43,8 @@ final class ShapeRenderLayer: ShapeContainerLayer {
       "hidden" : NSNull(),
     ]
     addSublayer(shapeLayer)
+
+    renderer.setUpSublayers(layer: shapeLayer)
   }
   
   override init(layer: Any) {
@@ -64,27 +66,7 @@ final class ShapeRenderLayer: ShapeContainerLayer {
   }
   
   override func rebuildContents(forFrame: CGFloat) {
-    
-    if renderer.shouldRenderInContext {
-      if let newPath = renderer.outputPath {
-        self.bounds = renderer.renderBoundsFor(newPath.boundingBox)
-      } else {
-        self.bounds = .zero
-      }
-      self.position = bounds.origin
-      self.setNeedsDisplay()
-    } else {
-      shapeLayer.path = renderer.outputPath
-      renderer.updateShapeLayer(layer: shapeLayer)
-    }
-  }
-  
-  override func draw(in ctx: CGContext) {
-    if let path = renderer.outputPath {
-      if !path.isEmpty {
-        ctx.addPath(path)
-      }
-    }
-    renderer.render(ctx)
+    shapeLayer.path = renderer.outputPath
+    renderer.updateShapeLayer(layer: shapeLayer)
   }
 }
